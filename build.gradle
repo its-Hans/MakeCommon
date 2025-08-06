@@ -20,6 +20,10 @@ def propIn = [
 		version: project_version
 ]
 
+java {
+	withSourcesJar()
+}
+
 jar {
 	inputs.properties(propIn)
 	from('LICENSE') {
