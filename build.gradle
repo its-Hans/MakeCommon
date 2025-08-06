@@ -1,0 +1,28 @@
+plugins {
+	id 'org.jetbrains.kotlin.jvm' version "${kotlin_version}"
+}
+
+version project_version
+group project_group
+
+allprojects {
+	repositories {
+		maven {
+			url 'https://maven.aliyun.com/repository/public/'
+		}
+
+		mavenCentral()
+	}
+}
+
+def propIn = [
+		name: project_name,
+		version: project_version
+]
+
+jar {
+	inputs.properties(propIn)
+	from('LICENSE') {
+		rename { "${it}_${inputs.properties.name}" }
+	}
+}
