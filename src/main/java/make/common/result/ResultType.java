@@ -1,7 +1,7 @@
 package make.common.result;
 
 public enum ResultType {
-    OK(true) {
+    OK {
 
         @SuppressWarnings("unchecked")
         @Override
@@ -16,7 +16,7 @@ public enum ResultType {
         }
     },
 
-    ERR(false) {
+    ERR {
 
         @Override
         <T> T unwrap(Object result) throws NotOkError {
@@ -30,12 +30,6 @@ public enum ResultType {
     }
 
     ;
-
-    public final boolean ok;
-
-    ResultType(boolean ok) {
-        this.ok = ok;
-    }
 
     abstract <T> T unwrap(Object result);
     abstract <T> T expected(Object result, String message);
