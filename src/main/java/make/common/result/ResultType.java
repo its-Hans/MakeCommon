@@ -1,16 +1,7 @@
 package make.common.result;
 
 public enum ResultType {
-    OK {
-        @Override
-        public boolean isOk() {
-            return true;
-        }
-
-        @Override
-        public boolean isErr() {
-            return false;
-        }
+    OK(true) {
 
         @SuppressWarnings("unchecked")
         @Override
@@ -25,19 +16,10 @@ public enum ResultType {
         }
     },
 
-    ERR {
-        @Override
-        public boolean isOk() {
-            return false;
-        }
+    ERR(false) {
 
         @Override
-        public boolean isErr() {
-            return true;
-        }
-
-        @Override
-        <T> T unwrap(Object result) {
+        <T> T unwrap(Object result) throws NotOkError {
             throw new NotOkError("result isn't ok but unwrap called");
         }
 
@@ -49,8 +31,12 @@ public enum ResultType {
 
     ;
 
-    public abstract boolean isOk();
-    public abstract boolean isErr();
-    abstract <T> T unwrap(Object result) throws NotOkError;
-    abstract <T> T expected(Object result, String message) throws NotOkError;
+    public final boolean ok;
+
+    ResultType(boolean ok) {
+        this.ok = ok;
+    }
+
+    abstract <T> T unwrap(Object result);
+    abstract <T> T expected(Object result, String message);
 }
