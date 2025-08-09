@@ -13,7 +13,7 @@ inline fun <K, V> mapValues(keys: Set<K>, mapper: (K) -> V) =
         this(it, mapper(it))
     }
 
-fun <K, V> mapKeys(values: Set<V>, mapper: (V) -> K) =
+inline fun <K, V> mapKeys(values: Set<V>, mapper: (V) -> K) =
     map(values) {
         this(mapper(it), it)
 }
