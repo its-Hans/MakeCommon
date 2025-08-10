@@ -1,19 +1,16 @@
 package make.common.collection
 
-inline fun <K, V, T> map(set: Set<T>, mapper: ((K, V) -> Unit).(T) -> Unit): MutableMap<K, V> {
-    val map = HashMap<K, V>(set.size)
-    for (element in set)
-        mapper(map::put, element)
+inline fun <K, V, T> Collection<T>.map(transformer: (T) -> Pair<K, V>): MutableMap<K, V> {
+    val map = HashMap<K, V>(size)
+
+    for (element in this)
+        transformer(element).apply { map[first] = second }
 
     return map
 }
 
-inline fun <K, V> mapValues(keys: Set<K>, mapper: (K) -> V) =
-    map(keys) {
-        this(it, mapper(it))
-    }
+inline fun <K, V> Collection<K>.mapValues(transformer: (K) -> V) =
+    map { it to transformer(it) }
 
-inline fun <K, V> mapKeys(values: Set<V>, mapper: (V) -> K) =
-    map(values) {
-        this(mapper(it), it)
-}
+inline fun <K, V> Collection<V>.mapKeys(transformer: (V) -> K) =
+    map { transformer(it) to it }
