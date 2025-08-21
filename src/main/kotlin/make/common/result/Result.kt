@@ -1,6 +1,6 @@
 package make.common.result
 
-sealed interface Result<T, E> {
+sealed interface Result<out T, out E> {
     val result: Any?
 
     fun unwrap(): T
