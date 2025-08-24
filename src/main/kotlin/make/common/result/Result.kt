@@ -15,7 +15,7 @@ class Err<T, E>(override val result: E,
 ): Result<T, E>
 
 
-inline fun <T, R, E> Result<T, E>.map(transform: (T) -> R): Result<R, E> {
+inline fun <T, E, R> Result<T, E>.map(transform: (T) -> R): Result<R, E> {
     return when (this) {
         is Ok -> Ok(transform(result))
         is Err -> this as Err<R, E> // 外挂，。
