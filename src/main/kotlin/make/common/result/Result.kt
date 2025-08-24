@@ -18,3 +18,10 @@ class Err<T, E>(private val err: E): Result<T, E> {
     override fun unwrap() = throw Error("result isn't ok but unwrap called")
     override fun expected(message: String) = throw Error(message)
 }
+
+inline fun <T, R, E> Result<T, E>.map(transform: (T) -> R): Result<R, E> {
+    return when (this) {
+        is Ok -> Ok(transform(this.unwrap()))
+        is Err -> this
+    }
+}
