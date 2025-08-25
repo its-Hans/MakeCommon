@@ -10,22 +10,25 @@ inline fun <E, R> Err<*, E>.cast() = this as Err<R, E>
 
 inline fun unexpected(err: Any?) = Error("unexpected error: $err")
 
-inline fun <E> Result<*, E>.cat(action: (E) -> Unit) {
-    if (this is Err) action(result)
+inline fun <T, E> Result<T, E>.cat(action: Err<T, E>.() -> Unit) {
+    if (this is Err) action(this)
 }
 
-inline fun <T, E> Result<T, E>.thr(action: (E) -> Throwable): T {
-    cat { throw action(it) }
+inline fun <T, E> Result<T, E>.dft(action: Err<T, E>.() -> T): T {
+    if (this is Err) return action(this)
 
     return (this as Ok).result
 }
 
+inline fun <T, E> Result<T, E>.thr(action: Err<T, E>.() -> Throwable): T =
+    dft { throw action(this) }
+
 inline fun <T, E> Result<T, E>.unwrap() =
-    thr { unexpected(it) }
+    thr { unexpected(result) }
 
 inline fun <T, E> Result<T, E>.expected(message: String) =
     thr { Exception(message) }
 
-inline fun <T, E> Result<T, E>.ignore(match: (E) -> Boolean) {
-    cat { if (!match(it)) throw unexpected(it) }
+inline fun <T, E> Result<T, E>.ignore(match: Err<T, E>.() -> Boolean) {
+    cat { if (!match(this)) throw unexpected(result) }
 }
