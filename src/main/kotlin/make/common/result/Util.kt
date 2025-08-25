@@ -33,6 +33,7 @@ inline fun <T, E> Result<T, E>.ignore(match: Err<T, E>.() -> Boolean) {
     cat { if (!match(this)) throw unexpected(result) }
 }
 
+// 意味不明的周文轩代码。
 inline fun <T, E, R> Result<T, E>.map(transform: (T) -> R): Result<R, E> {
     return when (this) {
         is Ok -> Ok(transform(result))
