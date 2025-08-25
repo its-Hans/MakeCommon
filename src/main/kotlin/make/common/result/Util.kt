@@ -15,7 +15,7 @@ inline fun <T, E> Result<T, E>.cat(action: Err<T, E>.() -> Unit) {
 }
 
 inline fun <T, E> Result<T, E>.dft(action: Err<T, E>.() -> T): T {
-    if (this is Err) return action(this)
+    cat { return action() }
 
     return (this as Ok).result
 }
@@ -31,4 +31,18 @@ inline fun <T, E> Result<T, E>.expected(message: String) =
 
 inline fun <T, E> Result<T, E>.ignore(match: Err<T, E>.() -> Boolean) {
     cat { if (!match(this)) throw unexpected(result) }
+}
+
+inline fun <T, E, R> Result<T, E>.map(transform: (T) -> R): Result<R, E> {
+    return when (this) {
+        is Ok -> Ok(transform(result))
+        is Err -> cast()
+    }
+}
+
+inline fun <T, E, R> Result<T, E>.map(transform: (E) -> R): Result<T, R> {
+    return when (this) {
+        is Err -> Err(transform(result))
+        is Ok -> cast()
+    }
 }
