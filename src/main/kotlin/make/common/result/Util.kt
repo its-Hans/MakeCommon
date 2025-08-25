@@ -8,24 +8,24 @@ inline fun <T, R> Ok<T, *>.cast() = this as Ok<T, R>
 @Suppress("unchecked_cast")
 inline fun <E, R> Err<*, E>.cast() = this as Err<R, E>
 
-inline fun <E> Err<*, E>.unexpected(): Nothing {
-    throw Error("unexpected error: $result")
+inline fun unexpected(err: Any?) = Error("unexpected error: $err")
+
+inline fun <E> Result<*, E>.cat(action: (E) -> Unit) {
+    if (this is Err) action(result)
 }
 
-inline fun <T, E> Result<T, E>.unwrap(): T {
-    when (this) {
-        is Ok -> return result
-        is Err -> unexpected()
-    }
+inline fun <T, E> Result<T, E>.thr(action: (E) -> Throwable): T {
+    cat { throw action(it) }
+
+    return (this as Ok).result
 }
 
-inline fun <T, E> Result<T, E>.expected(message: String): T {
-    when (this) {
-        is Ok -> return result
-        is Err -> throw Exception(message)
-    }
-}
+inline fun <T, E> Result<T, E>.unwrap() =
+    thr { unexpected(it) }
 
-inline fun <E> Err<*, E>.ignore(match: (E) -> Boolean) {
-    if (!match(result)) unexpected()
+inline fun <T, E> Result<T, E>.expected(message: String) =
+    thr { Exception(message) }
+
+inline fun <T, E> Result<T, E>.ignore(match: (E) -> Boolean) {
+    cat { if (!match(it)) throw unexpected(it) }
 }
