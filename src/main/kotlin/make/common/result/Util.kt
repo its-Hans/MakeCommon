@@ -20,7 +20,7 @@ inline fun <T, E> Result<T, E>.dft(action: Err<T, E>.() -> T): T {
     return (this as Ok).result
 }
 
-inline fun <T, E> Result<T, E>.thr(action: Err<T, E>.() -> Throwable): T =
+inline fun <T, E> Result<T, E>.thr(action: Err<T, E>.() -> Throwable) =
     dft { throw action(this) }
 
 inline fun <T, E> Result<T, E>.unwrap() =
