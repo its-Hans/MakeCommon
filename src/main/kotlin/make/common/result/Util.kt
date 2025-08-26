@@ -34,14 +34,14 @@ inline fun <T, E> Result<T, E>.ignore(match: Err<T, E>.() -> Boolean) {
 }
 
 // 意味不明的周文轩代码。
-inline fun <T, E, R> Result<T, E>.map(transform: (T) -> R): Result<R, E> {
+inline fun <T, E, R> Result<T, E>.mapok(transform: (T) -> R): Result<R, E> {
     return when (this) {
         is Ok -> Ok(transform(result))
         is Err -> cast()
     }
 }
 
-inline fun <T, E, R> Result<T, E>.map(transform: (E) -> R): Result<T, R> {
+inline fun <T, E, R> Result<T, E>.maper(transform: (E) -> R): Result<T, R> {
     return when (this) {
         is Err -> Err(transform(result))
         is Ok -> cast()
