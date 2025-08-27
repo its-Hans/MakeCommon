@@ -16,7 +16,7 @@ inline fun <T, E> Result<T, E>.dft(action: Err<E>.() -> T): T {
 inline fun <T, E> Result<T, E>.thr(action: Err<E>.() -> Throwable): T =
     dft { throw action(this) }
 
-inline fun <T, E> Result<T, E>.unw(): T =
+inline fun <T, E> Result<T, E>.unr(): T =
     thr { UnexpectedErr(this) }
 
 inline fun <T, E> Result<T, E>.exp(message: Err<E>.() -> String): T =
@@ -25,7 +25,7 @@ inline fun <T, E> Result<T, E>.exp(message: Err<E>.() -> String): T =
 inline fun <T, E> Result<T, E>.exp(message: String): T =
     exp { message }
 
-inline fun <T, E> Result<T, E>.ign(match: Err<E>.() -> Boolean) {
+inline fun <T, E> Result<T, E>.igr(match: Err<E>.() -> Boolean) {
     cat { if (!match(this)) throw UnexpectedErr(this) }
 }
 
