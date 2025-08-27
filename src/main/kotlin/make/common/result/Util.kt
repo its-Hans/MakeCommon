@@ -1,11 +1,9 @@
 @file:Suppress("nothing_to_inline")
 package make.common.result
 
-// 外挂，。
-@Suppress("unchecked_cast")
+// 合法，。
 inline fun <T, E> Ok<T>.cast() = this as Result<T, E>
 
-@Suppress("unchecked_cast")
 inline fun <T, E> Err<E>.cast() = this as Result<T, E>
 
 inline fun unexpected(err: Any?) = Error("unexpected error: $err")
