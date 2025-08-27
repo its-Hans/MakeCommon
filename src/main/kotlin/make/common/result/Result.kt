@@ -1,18 +1,17 @@
 package make.common.result
 
 sealed interface Result<out T, out E> {
-    val result: Any?
     val cause: Result<*, *>?
 }
 
-class Ok<T, E> @JvmOverloads
+class Ok<T> @JvmOverloads
 constructor(
-    override val result: T,
+    val result: T,
     override val cause: Result<*, *>? = null
-): Result<T, E>
+): Result<T, Nothing>
 
-class Err<T, E> @JvmOverloads
+class Err<E> @JvmOverloads
 constructor(
-    override val result: E,
+    val error: E,
     override val cause: Result<*, *>? = null
-): Result<T, E>
+): Result<Nothing, E>
