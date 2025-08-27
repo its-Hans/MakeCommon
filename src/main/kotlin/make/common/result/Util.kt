@@ -1,11 +1,6 @@
 @file:Suppress("nothing_to_inline")
 package make.common.result
 
-// 合法，。
-inline fun <T, E> Ok<T>.cast() = this as Result<T, E>
-
-inline fun <T, E> Err<E>.cast() = this as Result<T, E>
-
 inline fun unexpected(err: Any?) = Error("unexpected error: $err")
 
 inline fun <T, E> Result<T, E>.cat(action: Err<E>.() -> Unit) {
@@ -35,13 +30,13 @@ inline fun <T, E> Result<T, E>.ignore(match: Err<E>.() -> Boolean) {
 inline fun <T, E, R> Result<T, E>.mapok(transform: (T) -> R): Result<R, E> {
     return when (this) {
         is Ok -> Ok(transform(result))
-        is Err -> cast()
+        is Err -> this as Result<R, E>
     }
 }
 
 inline fun <T, E, R> Result<T, E>.maper(transform: (E) -> R): Result<T, R> {
     return when (this) {
         is Err -> Err(transform(error))
-        is Ok -> cast()
+        is Ok -> this as Result<T, R>
     }
 }
