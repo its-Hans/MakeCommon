@@ -39,7 +39,7 @@ inline fun <T, E> Result<T, E>.igr(match: Err<E>.() -> Boolean) {
 inline fun <T, E, R> Result<T, E>.map(transform: (T) -> R): Result<R, E> {
     return when (this) {
         is Ok -> Ok(transform(result))
-        is Err -> this as Result<R, E>
+        is Err -> this
     }
 }
 
@@ -47,6 +47,6 @@ inline fun <T, E, R> Result<T, E>.map(transform: (T) -> R): Result<R, E> {
 inline fun <T, E, R> Result<T, E>.mae(transform: (E) -> R): Result<T, R> {
     return when (this) {
         is Err -> Err(transform(error))
-        is Ok -> this as Result<T, R>
+        is Ok -> this
     }
 }
