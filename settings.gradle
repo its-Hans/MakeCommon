@@ -1,1 +1,11 @@
 rootProject.name = project_name
+
+dependencyResolutionManagement {
+    repositories {
+        maven {
+            url 'https://maven.aliyun.com/repository/central'
+        }
+
+        mavenCentral()
+    }
+}

@@ -5,16 +5,6 @@ plugins {
 version project_version
 group project_group
 
-allprojects {
-	repositories {
-		maven {
-			url 'https://maven.aliyun.com/repository/public/'
-		}
-
-		mavenCentral()
-	}
-}
-
 def propIn = [
 		name: project_name,
 		version: project_version
