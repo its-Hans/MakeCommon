@@ -1,4 +1,4 @@
-@file:Suppress("nothing_to_inline")
+@file:Suppress("nothing_to_inline", "unused")
 package make.common.result
 
 class UnexpectedErr(err: Err<*>): Error("unexpected error: $err")
